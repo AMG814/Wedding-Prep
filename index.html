@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedding Prep</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f4f0;color:#1a1a18;min-height:100vh;padding:1.5rem 1rem}
+.app{max-width:740px;margin:0 auto}
+h1{font-size:22px;font-weight:500;margin-bottom:4px}
+.subtitle{font-size:13px;color:#888780;margin-bottom:1.5rem}
+.garmin-link{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:0.5px solid #b4b2a9;border-radius:8px;font-size:13px;color:#5F5E5A;text-decoration:none;background:#fff;margin-bottom:1.5rem}
+.garmin-link:hover{background:#f5f4f0}
+.progress-wrap{background:#fff;border:0.5px solid #d3d1c7;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.25rem}
+.progress-meta{display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;color:#888780}
+.progress-meta strong{color:#1a1a18;font-weight:500}
+.bar-track{height:8px;background:#e8e7e2;border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:#1D9E75;transition:width 0.4s}
+.bar-sub{display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:#888780}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.25rem}
+.metric{background:#f1efe8;border-radius:8px;padding:0.85rem 1rem}
+.metric .lbl{font-size:12px;color:#888780;margin-bottom:3px}
+.metric .val{font-size:22px;font-weight:500;color:#1a1a18}
+.metric .sub{font-size:11px;color:#888780;margin-top:1px}
+.week-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-bottom:1.25rem}
+.wc{background:#fff;border:0.5px solid #d3d1c7;border-radius:8px;padding:6px 4px;text-align:center;cursor:pointer;font-size:12px;transition:background 0.1s}
+.wc .dn{color:#888780;font-size:11px;margin-bottom:2px}
+.wc .dd{font-weight:500;font-size:14px;margin-bottom:3px}
+.wc .dots{display:flex;justify-content:center;gap:2px;flex-wrap:wrap}
+.dot{width:5px;height:5px;border-radius:50%;background:#d3d1c7}
+.dot.done{background:#1D9E75}
+.wc.today{border:1.5px solid #1D9E75}
+.wc.sel{background:#f1efe8}
+.card{background:#fff;border:0.5px solid #d3d1c7;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.card-title{font-size:15px;font-weight:500}
+.card-sub{font-size:12px;color:#888780;margin-top:2px}
+.badge{font-size:11px;padding:3px 10px;border-radius:8px;font-weight:500;white-space:nowrap}
+.b-strength{background:#e1f5ee;color:#0F6E56}
+.b-bike{background:#e6f1fb;color:#185FA5}
+.b-rest{background:#f1efe8;color:#5F5E5A}
+.b-done{background:#eaf3de;color:#3B6D11}
+.checks{display:flex;flex-direction:column;gap:5px}
+.cr{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;border:0.5px solid transparent;transition:background 0.1s}
+.cr:hover{background:#f5f4f0}
+.cr.done{background:#f5f4f0}
+.cb{width:20px;height:20px;min-width:20px;border:0.5px solid #b4b2a9;border-radius:4px;display:flex;align-items:center;justify-content:center;background:#fff;margin-top:1px;flex-shrink:0}
+.cr.done .cb{background:#1D9E75;border-color:#1D9E75}
+.cm{display:none;width:11px;height:7px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
+.cr.done .cm{display:block}
+.cl{font-size:14px;line-height:1.4}
+.cr.done .cl{color:#888780}
+.cd{font-size:12px;color:#888780;margin-top:2px;line-height:1.5}
+.section-label{font-size:12px;font-weight:500;color:#888780;text-transform:uppercase;letter-spacing:0.05em;margin:1.25rem 0 0.6rem}
+.date-nav{display:flex;align-items:center;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.dnav-btn{padding:6px 12px;border:0.5px solid #b4b2a9;border-radius:8px;font-size:13px;cursor:pointer;background:#fff;color:#5F5E5A}
+.dnav-btn:hover{background:#f5f4f0}
+.today-btn{padding:6px 14px;border:0.5px solid #1D9E75;border-radius:8px;font-size:13px;cursor:pointer;background:#1D9E75;color:#fff}
+.water-widget{background:#e6f1fb;border:0.5px solid #b5d4f4;border-radius:10px;padding:0.85rem 1rem;margin-bottom:6px}
+.water-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.water-label{font-size:14px;font-weight:500;color:#0C447C}
+.water-oz{font-size:22px;font-weight:500;color:#185FA5}
+.water-oz span{font-size:13px;font-weight:400;color:#378ADD;margin-left:2px}
+.water-bar-track{height:10px;background:#b5d4f4;border-radius:5px;overflow:hidden;margin-bottom:8px}
+.water-bar-fill{height:100%;border-radius:5px;background:#185FA5;transition:width 0.3s}
+.water-btns{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.w-add-btn{padding:6px 14px;border:0.5px solid #378ADD;border-radius:8px;font-size:13px;cursor:pointer;background:#fff;color:#185FA5;font-weight:500}
+.w-add-btn:hover{background:#e6f1fb}
+.w-reset-btn{padding:6px 10px;border:0.5px solid #b4b2a9;border-radius:8px;font-size:12px;cursor:pointer;background:#fff;color:#888780}
+.w-goal-note{font-size:12px;color:#378ADD;margin-left:auto}
+.chart-section{background:#fff;border:0.5px solid #d3d1c7;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
+.chart-tabs{display:flex;gap:6px;margin-bottom:1rem}
+.tab{padding:5px 12px;border:0.5px solid #b4b2a9;border-radius:8px;font-size:12px;cursor:pointer;background:#fff;color:#888780}
+.tab.active{background:#1D9E75;border-color:#1D9E75;color:#fff}
+@media(max-width:480px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.diet-section{background:#fff;border:0.5px solid #d3d1c7;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
+.macro-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:1rem}
+.macro-card{background:#f5f4f0;border-radius:8px;padding:0.7rem 0.85rem}
+.macro-card .m-lbl{font-size:11px;color:#888780;margin-bottom:2px}
+.macro-card .m-val{font-size:18px;font-weight:500;color:#1a1a18}
+.macro-card .m-goal{font-size:11px;color:#888780;margin-top:1px}
+.macro-card .m-bar{height:4px;background:#e8e7e2;border-radius:2px;margin-top:5px;overflow:hidden}
+.macro-card .m-bar-fill{height:100%;border-radius:2px;transition:width 0.3s}
+.macro-input{width:100%;font-size:20px;font-weight:500;color:#1a1a18;background:transparent;border:none;outline:none;padding:2px 0;margin:4px 0 1px;-moz-appearance:textfield;}
+.macro-input::-webkit-outer-spin-button,.macro-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.meal-block{border:0.5px solid #e8e7e2;border-radius:8px;margin-bottom:8px;overflow:hidden}
+.meal-header{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#faf9f7;cursor:pointer;user-select:none}
+.meal-header .m-name{font-size:13px;font-weight:500;color:#1a1a18}
+.meal-header .m-cals{font-size:12px;color:#888780}
+.meal-entries{padding:8px 12px}
+.meal-entry{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid #f0efe9;font-size:13px}
+.meal-entry:last-child{border-bottom:none}
+.meal-entry .e-name{color:#1a1a18;flex:1}
+.meal-entry .e-macros{color:#888780;font-size:12px;white-space:nowrap;margin-left:8px}
+.meal-entry .e-del{color:#b4b2a9;cursor:pointer;padding:0 4px;font-size:16px;line-height:1}
+.meal-entry .e-del:hover{color:#E24B4A}
+.add-food-row{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.add-food-row input{flex:2;min-width:80px;padding:5px 8px;border:0.5px solid #d3d1c7;border-radius:6px;font-size:12px;background:#fff;color:#1a1a18}
+.add-food-row input.num{flex:1;min-width:48px}
+.add-food-btn{padding:5px 10px;border:0.5px solid #1D9E75;border-radius:6px;font-size:12px;cursor:pointer;background:#1D9E75;color:#fff;white-space:nowrap}
+.add-food-btn:hover{background:#0F6E56}
+.diet-daily-note{font-size:12px;color:#888780;margin-top:2px}
+
+.modal-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.35);display:flex;align-items:flex-start;justify-content:center;padding-top:80px;z-index:100}
+.modal-box{background:#fff;border:0.5px solid #d3d1c7;border-radius:12px;padding:1.25rem;width:100%;max-width:480px;margin:0 1rem}
+.modal-box h2{font-size:16px;font-weight:500;margin-bottom:4px;color:#1a1a18}
+.modal-box .modal-sub{font-size:12px;color:#888780;margin-bottom:1rem}
+.workout-block{margin-bottom:1rem}
+.workout-block .wb-title{font-size:12px;font-weight:500;color:#888780;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px}
+.workout-exercise{background:#f5f4f0;border-radius:8px;padding:8px 12px;margin-bottom:5px}
+.workout-exercise .we-name{font-size:14px;font-weight:500;color:#1a1a18;margin-bottom:2px}
+.workout-exercise .we-sets{font-size:12px;color:#888780}
+.circuit-step{display:flex;align-items:baseline;gap:8px;padding:5px 0;border-bottom:0.5px solid #f0efe9;font-size:13px}
+.circuit-step:last-child{border-bottom:none}
+.circuit-step .cs-num{font-size:11px;font-weight:500;color:#1D9E75;min-width:18px}
+.circuit-step .cs-text{color:#1a1a18}
+.modal-close{width:100%;padding:8px;border:0.5px solid #d3d1c7;border-radius:8px;font-size:13px;cursor:pointer;background:#fff;color:#5F5E5A;margin-top:4px}
+.modal-close:hover{background:#f5f4f0}
+.cr-expandable{cursor:pointer}
+.cr-expandable .expand-hint{font-size:11px;color:#1D9E75;margin-top:2px}
+
+.weight-setup{background:#fff;border:0.5px solid #d3d1c7;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
+.weight-setup h3{font-size:14px;font-weight:500;margin-bottom:4px;color:#1a1a18}
+.weight-setup p{font-size:12px;color:#888780;margin-bottom:12px}
+.weight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.weight-input-row{display:flex;flex-direction:column;gap:3px}
+.weight-input-row label{font-size:11px;color:#888780}
+.weight-input-row input{padding:6px 8px;border:0.5px solid #d3d1c7;border-radius:6px;font-size:13px;background:#fff;color:#1a1a18;width:100%}
+.weight-save-btn{padding:7px 16px;border:0.5px solid #1D9E75;border-radius:8px;font-size:13px;cursor:pointer;background:#1D9E75;color:#fff}
+.weight-save-btn:hover{background:#0F6E56}
+.weight-edit-btn{padding:5px 10px;border:0.5px solid #b4b2a9;border-radius:6px;font-size:12px;cursor:pointer;background:#fff;color:#888780;margin-left:8px}
+.we-weight{font-size:13px;font-weight:500;color:#1D9E75;margin-top:3px}
+.we-prog{font-size:11px;color:#888780}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>Wedding Prep</h1>
+  <p class="subtitle" id="subtitle">April 1 – July 29, 2025 · 120 days</p>
+
+  <a class="garmin-link" href="https://connect.garmin.com/modern/" target="_blank">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    Open Garmin Connect
+  </a>
+
+  <div class="progress-wrap">
+    <div class="progress-meta"><span>Overall progress</span><strong id="pct">0%</strong></div>
+    <div class="bar-track"><div class="bar-fill" id="bar" style="width:0%"></div></div>
+    <div class="bar-sub"><span id="days-done">0 days complete</span><span id="days-left">120 days remaining</span></div>
+  </div>
+
+  <div class="metrics">
+    <div class="metric"><div class="lbl">Streak</div><div class="val" id="m-streak">0</div><div class="sub">days</div></div>
+    <div class="metric"><div class="lbl">This week</div><div class="val" id="m-week">0/7</div><div class="sub">complete</div></div>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin:1.25rem 0 0.6rem">
+    <span style="font-size:12px;font-weight:500;color:#888780;text-transform:uppercase;letter-spacing:0.05em" id="week-label">This week</span>
+    <div style="display:flex;align-items:center;gap:6px">
+      <button class="dnav-btn" style="padding:4px 10px;font-size:12px" onclick="shiftWeek(-1)">&#8592;</button>
+      <button class="w-reset-btn" style="font-size:12px;padding:4px 10px" onclick="goCurrentWeek()">Current week</button>
+      <button class="dnav-btn" style="padding:4px 10px;font-size:12px" onclick="shiftWeek(1)">&#8594;</button>
+    </div>
+  </div>
+  <div class="week-grid" id="week-grid"></div>
+
+  <div class="date-nav">
+    <button class="dnav-btn" onclick="shiftDay(-1)">&#8592; Prev</button>
+    <button class="today-btn" onclick="goToday()">Today</button>
+    <button class="dnav-btn" onclick="shiftDay(1)">Next &#8594;</button>
+  </div>
+
+  <div id="day-card"></div>
+
+
+  <div class="section-label" style="display:flex;justify-content:space-between;align-items:center">
+    <span>Starting weights</span>
+    <button class="weight-edit-btn" onclick="toggleWeightSetup()">Edit</button>
+  </div>
+  <div id="weight-setup-panel"></div>
+  <div class="section-label">Diet — daily log</div>
+  <div id="diet-section"></div>
+
+
+</div>
+
+<div id="workout-modal" style="display:none;position:relative"></div>
+
+<script>
+const TOTAL = 120;
+const GOAL_OZ = 128;
+const SERVING = 35;
+const START = new Date('2025-04-01T00:00:00');
+
+function dk(d){ return new Date(d).toISOString().slice(0,10); }
+function idx(d){
+  const s=new Date(START); s.setHours(0,0,0,0);
+  const t=new Date(d); t.setHours(0,0,0,0);
+  return Math.round((t-s)/86400000);
+}
+function dow(d){ return new Date(d).getDay(); }
+
+const CIRCUITS=[
+  {label:'Hyrox circuit — 4 rounds',detail:'250m row → 15 KB swings → 10 wall ball → 20m farmer carry · Rest 90 sec between rounds · Target 18–20 min total'},
+  {label:'Strength intervals — 15 min',detail:'Every 3 min x 5 rounds: 10 KB swings + 8 wall ball + 200m row · Note your row split each round · Rest remainder of each 3 min window'},
+  {label:'Hyrox sim — 3 rounds',detail:'200m row → 15 KB swings → 10 wall ball → 20m farmer carry (light DBs) · 2 min rest between rounds · Target 15–18 min total'},
+  {label:'EMOM — 12 min',detail:'Min 1: 12 KB swings · Min 2: 10 wall ball · Min 3: 20m farmer carry + back · Repeat 4 rounds · Full minute = full effort, rest = remainder of minute'},
+  {label:'Hyrox station grind — 3 rounds',detail:'300m row → 20m farmer carry × 2 → 10 wall ball → 10 low box step-overs · 90 sec rest between rounds · Target 15–20 min'},
+  {label:'Power intervals — 12 min',detail:'Every 2 min x 6 rounds: 8 KB swings (heavier) + 6 wall ball (power focus) · Max output each set · Rest remainder of each 2 min window'},
+  {label:'Hyrox circuit — 4 rounds',detail:'200m row → 20m farmer carry → 12 KB swings → 10 wall ball · Rest 90 sec · Push row pace hard on rounds 3 and 4'},
+  {label:'Conditioning AMRAP — 12 min',detail:'10 KB swings → 8 wall ball → 20m farmer carry → 10 low box step-overs — as many rounds as possible · Log your round count'},
+  {label:'Hyrox intervals — 4 rounds',detail:'1 min row max cal → 10 wall ball → 20m farmer carry · Rest 90 sec between rounds · Record cal total for the row each round'},
+  {label:'KB + carry — 15 min',detail:'Every 3 min x 5 rounds: 15 KB swings + 20m farmer carry (heavy) · Rest remainder of 3 min · Farmer carry is the money movement here'},
+  {label:'Hyrox benchmark — 3 rounds',detail:'300m row → 15 KB swings → 10 wall ball → 20m farmer carry × 2 · 2 min rest · Record total time · Repeat monthly to track progress'},
+  {label:'Death by KB — 12 min cap',detail:'Min 1: 2 KB swings · Min 2: 4 KB swings · Min 3: 6 KB swings — add 2 reps each min · When you fail a round, drop to 10 flat for remaining mins'},
+  {label:'Hyrox sim — 4 rounds',detail:'250m row → 12 KB swings → 8 wall ball (heavy) → 20m farmer carry · Rest 90 sec · Heavier than normal — dial back reps if needed'},
+  {label:'Tabata — 16 min',detail:'4 exercises x 4 rounds: 20 sec on / 10 sec off · KB swings → wall ball → farmer carry hold → row sprint · Rotate each set · No rest between exercises'},
+  {label:'Hyrox circuit — 5 rounds',detail:'200m row → 10 KB swings → 8 wall ball → 20m farmer carry · Rest 60 sec · Shorter rest = higher intensity · Stay controlled on KB'},
+  {label:'EMOM — 15 min',detail:'Min 1: 15 KB swings · Min 2: 10 wall ball · Min 3: 20m farmer carry + back · Repeat 5 rounds · This is your benchmark EMOM — try to beat round 1 pace on round 5'},
+  {label:'Hyrox station grind — 4 rounds',detail:'300m row → 20m farmer carry (heavy) → 12 KB swings → 10 wall ball → 10 step-overs · Rest 2 min · Target 18–20 min total'},
+  {label:'Power AMRAP — 12 min',detail:'6 KB swings (heavy) → 5 wall ball (heavy) → 200m row — as many rounds as possible · Quality reps only · Log rounds + partials'},
+  {label:'Hyrox sim — full effort',detail:'400m row → 20 KB swings → 15 wall ball → 20m farmer carry × 2 · One round for time · Record it · This is your monthly benchmark'},
+  {label:'Intervals — 15 min',detail:'Every 90 sec x 10 rounds: 8 KB swings + 6 wall ball · Rest remainder of 90 sec · Short window forces pace — keep swings crisp'},
+  {label:'Hyrox circuit — 4 rounds',detail:'250m row → 20m farmer carry → 15 KB swings → 8 wall ball · Rest 90 sec between rounds · Final round max effort on row'},
+  {label:'EMOM — 12 min',detail:'Min 1: 10 KB swings + 20m farmer carry · Min 2: 12 wall ball · Min 3: rest — repeat 4 rounds · Use the rest minute intentionally'},
+  {label:'Hyrox finisher — 4 rounds',detail:'300m row → 15 KB swings → 10 wall ball → 20m farmer carry · Rest 90 sec · Push every row pace · Log splits'},
+  {label:'Strength AMRAP — 12 min',detail:'10 KB swings → 8 wall ball → 20m farmer carry (heavy) — as many rounds as possible · Heavier than usual on carry · Log rounds'},
+  {label:'Hyrox benchmark — final',detail:'500m row → 20 KB swings → 15 wall ball → 20m farmer carry × 2 → 500m row · Record total time · Compare to week 4 benchmark'},
+  {label:'Zone 2 flush — 15 min',detail:'5 min easy row (conversational pace) → 5 min easy bike (60–65% max HR) → 5 min easy row · Active recovery only · This is not a workout — it is recovery'},
+];
+
+function getCircuit(d){
+  const i=idx(d);
+  const monFriCount=Math.floor(i/7)*2+(dow(d)===5?1:0);
+  return CIRCUITS[monFriCount % CIRCUITS.length];
+}
+
+function tasks(d){
+  const w=dow(d);
+  const base=[
+    {id:'fiber',label:'Daily fiber',detail:null},
+    {id:'plank',label:'Plank for 1 minute',detail:null},
+    {id:'steps',label:'5,000 steps',detail:'Check Garmin Connect for your step count'},
+    {id:'read',label:'Read 10 pages',detail:null},
+    {id:'supplements',label:'Take supplements',detail:'Magnesium glycinate · Apigenin · L-Theanine — 30 min before bed'},
+  ];
+  if(w===1||w===5){
+    const wk=getWorkoutForDay(d);
+    const ci=getCircuit(d);
+    base.push({id:'strength',label:wk.name+' — tap to see full workout',detail:ci.label});
+  } else if(w===3){
+    const wk=getWorkoutForDay(d);
+    base.push({id:'strength',label:wk.name+' — tap to see full workout',detail:'Wednesday lift day'});
+  } else if(w===2||w===4||w===6){
+    base.push({id:'bike',label:'Bike ride',detail:'Log ride on Garmin Connect'});
+  }
+  return base;
+}
+
+function badge(d){
+  const w=dow(d);
+  if(w===1||w===5){const wk=getWorkoutForDay(d);return {t:(wk?wk.name:'Strength')+' + Circuit',c:'b-strength'};}
+  if(w===3){const wk=getWorkoutForDay(d);return {t:wk?wk.name:'Strength',c:'b-strength'};}
+  if(w===2||w===4||w===6) return {t:'Bike ride',c:'b-bike'};
+  return {t:'Active rest',c:'b-rest'};
+}
+
+function ld(k){ try{ return JSON.parse(localStorage.getItem('grind2_'+k)||'{}'); }catch(e){return {};} }
+function sd(k,v){ localStorage.setItem('grind2_'+k,JSON.stringify(v)); }
+
+function waterForDay(k){
+  const d=ld(k); return d.water_oz||0;
+}
+
+function addWater(k, oz){
+  const d=ld(k);
+  d.water_oz=(d.water_oz||0)+oz;
+  sd(k,d);
+}
+
+function resetWater(k){
+  const d=ld(k); d.water_oz=0; sd(k,d);
+}
+
+function waterDone(k){ return waterForDay(k)>=GOAL_OZ; }
+
+function complete(k,t){
+  return t.every(x=>ld(k)[x.id]) && waterDone(k);
+}
+
+function stats(){
+  const today=new Date(); today.setHours(0,0,0,0);
+  let streak=0,workouts=0,water=0,weekDone=0,totalDone=0;
+  let d=new Date(today);
+  for(let i=0;i<TOTAL;i++){
+    const k=dk(d); const ix=idx(d);
+    if(ix<0||ix>=TOTAL){d.setDate(d.getDate()-1);continue;}
+    if(complete(k,tasks(d))){streak++;d.setDate(d.getDate()-1);}else break;
+  }
+  const sow=new Date(today); sow.setDate(today.getDate()-((today.getDay()+6)%7));
+  for(let i=0;i<7;i++){const day=new Date(sow);day.setDate(sow.getDate()+i);if(complete(dk(day),tasks(day)))weekDone++;}
+  for(let i=0;i<TOTAL;i++){
+    const d2=new Date(START);d2.setDate(START.getDate()+i);
+    const k=dk(d2);const data=ld(k);
+    if(waterDone(k))water++;
+    if(data.strength||data.bike)workouts++;
+    if(complete(k,tasks(d2)))totalDone++;
+  }
+  return {streak,workouts,water,weekDone,totalDone};
+}
+
+let sel=new Date(); sel.setHours(0,0,0,0);
+let weekOffset=0;
+
+function getSOW(offset){
+  const today=new Date();today.setHours(0,0,0,0);
+  const sow=new Date(today);sow.setDate(today.getDate()-((today.getDay()+6)%7)+(offset*7));
+  return sow;
+}
+
+function renderWeek(){
+  const today=new Date();today.setHours(0,0,0,0);
+  const sow=getSOW(weekOffset);
+  const eow=new Date(sow);eow.setDate(sow.getDate()+6);
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const lbl=document.getElementById('week-label');
+  if(weekOffset===0) lbl.textContent='This week';
+  else if(weekOffset===-1) lbl.textContent='Last week';
+  else lbl.textContent=months[sow.getMonth()]+' '+sow.getDate()+' – '+months[eow.getMonth()]+' '+eow.getDate();
+  const grid=document.getElementById('week-grid');grid.innerHTML='';
+  ['M','T','W','T','F','S','S'].forEach((l,i)=>{
+    const day=new Date(sow);day.setDate(sow.getDate()+i);
+    const k=dk(day);const data=ld(k);const t=tasks(day);
+    const isT=dk(day)===dk(today);const isS=dk(day)===dk(sel);
+    const cell=document.createElement('div');
+    cell.className='wc'+(isT?' today':'')+(isS?' sel':'');
+    const allT=[...t,{id:'_water'}];
+    const dots=allT.slice(0,5).map(x=>{
+      const done=x.id==='_water'?waterDone(k):!!data[x.id];
+      return `<div class="dot${done?' done':''}"></div>`;
+    }).join('');
+    cell.innerHTML=`<div class="dn">${l}</div><div class="dd">${day.getDate()}</div><div class="dots">${dots}</div>`;
+    cell.onclick=()=>{sel=new Date(day);render();
+renderWeightPanel();};
+    grid.appendChild(cell);
+  });
+}
+
+function renderCard(){
+  const container=document.getElementById('day-card');
+  const ix=idx(sel);
+
+  const key=dk(sel);const t=tasks(sel);const data=ld(key);
+  const oz=waterForDay(key);
+  const allDone=t.every(x=>data[x.id])&&waterDone(key);
+  const b=badge(sel);
+  const today=new Date();today.setHours(0,0,0,0);
+  const isT=dk(sel)===dk(today);
+  const dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const pct=Math.min(100,Math.round((oz/GOAL_OZ)*100));
+  const servings=Math.floor(oz/SERVING);
+
+  container.innerHTML=`
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">${isT?'Today — ':''}${dayNames[dow(sel)]}, ${months[sel.getMonth()]} ${sel.getDate()}</div>
+          <div class="card-sub">${ix>=0&&ix<TOTAL?'Day '+(ix+1)+' of '+TOTAL:''}</div>
+        </div>
+        <span class="badge ${allDone?'b-done':b.c}">${allDone?'Complete':b.t}</span>
+      </div>
+
+      <div class="water-widget">
+        <div class="water-top">
+          <div class="water-label">Water intake</div>
+          <div class="water-oz">${oz}<span>/ ${GOAL_OZ} fl oz</span></div>
+        </div>
+        <div class="water-bar-track">
+          <div class="water-bar-fill" id="water-bar" style="width:${pct}%"></div>
+        </div>
+        <div class="water-btns">
+          <button class="w-add-btn" onclick="logWater('${key}',${SERVING})">+ ${SERVING} fl oz</button>
+          <button class="w-add-btn" onclick="logWater('${key}',16)">+ 16 fl oz</button>
+          <button class="w-add-btn" onclick="logWater('${key}',8)">+ 8 fl oz</button>
+          <button class="w-reset-btn" onclick="resetWaterDay('${key}')">Reset</button>
+          <span class="w-goal-note">${waterDone(key)?'Goal hit!':Math.round(GOAL_OZ-oz)+' fl oz to go'}</span>
+        </div>
+      </div>
+
+      <div class="checks" id="checks"></div>
+    </div>`;
+
+  const list=document.getElementById('checks');
+  t.forEach(task=>{
+    const done=!!data[task.id];
+    const row=document.createElement('div');
+    row.className='cr'+(done?' done':'');
+    row.innerHTML=`<div class="cb"><div class="cm"></div></div><div><div class="cl">${task.label}</div>${task.detail?`<div class="cd">${task.detail}</div>`:''}</div>`;
+    if(task.id==='strength'){
+      const checkBox=row.querySelector('.cb');
+      checkBox.onclick=(e)=>{e.stopPropagation();const d2=ld(key);d2[task.id]=!d2[task.id];sd(key,d2);render();};
+      row.onclick=()=>showWorkoutModal(sel);
+      const hint=document.createElement('div');
+      hint.className='expand-hint';
+      hint.textContent='Tap to see full workout';
+      row.querySelector('div:last-child').appendChild(hint);
+    } else {
+      row.onclick=()=>{const d2=ld(key);d2[task.id]=!d2[task.id];sd(key,d2);render();};
+    }
+    list.appendChild(row);
+  });
+}
+
+function logWater(key, oz){
+  addWater(key, oz);
+  render();
+}
+function resetWaterDay(key){
+  resetWater(key);
+  render();
+}
+
+function renderStats(){
+  const s=stats();
+  document.getElementById('m-streak').textContent=s.streak;
+  document.getElementById('m-week').textContent=s.weekDone+'/7';
+
+  const pct=Math.round((s.totalDone/TOTAL)*100);
+  document.getElementById('bar').style.width=pct+'%';
+  document.getElementById('pct').textContent=pct+'%';
+  document.getElementById('days-done').textContent=s.totalDone+' days complete';
+  document.getElementById('days-left').textContent=(TOTAL-s.totalDone)+' days remaining';
+}
+
+
+const D_GOALS={cal:1950,protein:155,carbs:195,fat:61};
+
+function getDayMacros(k){
+  try{return JSON.parse(localStorage.getItem('macros_'+k)||'null');}catch(e){return null;}
+}
+function saveDayMacros(k,v){localStorage.setItem('macros_'+k,JSON.stringify(v));}
+
+function barColor(val,goal){
+  const p=val/goal;
+  if(p<0.85) return '#378ADD';
+  if(p<=1.05) return '#1D9E75';
+  return '#E24B4A';
+}
+
+function renderDiet(){
+  const key=dk(sel);
+  const saved=getDayMacros(key)||{cal:'',protein:'',carbs:'',fat:''};
+  const sec=document.getElementById('diet-section');
+  if(!sec) return;
+
+  const macroBar=(val,goal,color)=>{
+    const pct=Math.min(100,Math.round(((val||0)/goal)*100));
+    return `<div class="m-bar"><div class="m-bar-fill" style="width:${pct}%;background:${color}"></div></div>`;
+  };
+
+  const cal=parseInt(saved.cal)||0;
+  const protein=parseInt(saved.protein)||0;
+  const carbs=parseInt(saved.carbs)||0;
+  const fat=parseInt(saved.fat)||0;
+
+  sec.innerHTML=`<div class="diet-section">
+    <div class="macro-grid" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+      <div class="macro-card">
+        <div class="m-lbl">Calories</div>
+        <input class="macro-input" id="d-cal" type="number" min="0" placeholder="0" value="${saved.cal}" oninput="saveMacroInput('${key}')">
+        <div class="m-goal">/ ${D_GOALS.cal}</div>
+        ${macroBar(cal,D_GOALS.cal,barColor(cal,D_GOALS.cal))}
+      </div>
+      <div class="macro-card">
+        <div class="m-lbl">Protein</div>
+        <input class="macro-input" id="d-protein" type="number" min="0" placeholder="0" value="${saved.protein}" oninput="saveMacroInput('${key}')">
+        <div class="m-goal">/ ${D_GOALS.protein}g</div>
+        ${macroBar(protein,D_GOALS.protein,barColor(protein,D_GOALS.protein))}
+      </div>
+      <div class="macro-card">
+        <div class="m-lbl">Carbs</div>
+        <input class="macro-input" id="d-carbs" type="number" min="0" placeholder="0" value="${saved.carbs}" oninput="saveMacroInput('${key}')">
+        <div class="m-goal">/ ${D_GOALS.carbs}g</div>
+        ${macroBar(carbs,D_GOALS.carbs,barColor(carbs,D_GOALS.carbs))}
+      </div>
+      <div class="macro-card">
+        <div class="m-lbl">Fat</div>
+        <input class="macro-input" id="d-fat" type="number" min="0" placeholder="0" value="${saved.fat}" oninput="saveMacroInput('${key}')">
+        <div class="m-goal">/ ${D_GOALS.fat}g</div>
+        ${macroBar(fat,D_GOALS.fat,barColor(fat,D_GOALS.fat))}
+      </div>
+    </div>
+  </div>`;
+}
+
+function saveMacroInput(key){
+  const cal=document.getElementById('d-cal')?.value||'';
+  const protein=document.getElementById('d-protein')?.value||'';
+  const carbs=document.getElementById('d-carbs')?.value||'';
+  const fat=document.getElementById('d-fat')?.value||'';
+  saveDayMacros(key,{cal,protein,carbs,fat});
+  const macroBar=(val,goal,color)=>{
+    const pct=Math.min(100,Math.round(((parseInt(val)||0)/goal)*100));
+    return `<div class="m-bar"><div class="m-bar-fill" style="width:${pct}%;background:${color}"></div></div>`;
+  };
+  [
+    {id:'d-cal',goal:D_GOALS.cal,val:cal},
+    {id:'d-protein',goal:D_GOALS.protein,val:protein},
+    {id:'d-carbs',goal:D_GOALS.carbs,val:carbs},
+    {id:'d-fat',goal:D_GOALS.fat,val:fat},
+  ].forEach(({id,goal,val})=>{
+    const card=document.getElementById(id)?.closest('.macro-card');
+    if(!card) return;
+    const existing=card.querySelector('.m-bar');
+    const v=parseInt(val)||0;
+    const newBar=document.createElement('div');
+    newBar.innerHTML=macroBar(v,goal,barColor(v,goal));
+    if(existing) card.replaceChild(newBar.firstChild,existing);
+    else card.appendChild(newBar.firstChild);
+    const goalEl=card.querySelector('.m-goal');
+    if(goalEl) goalEl.style.color=barColor(v,goal);
+  });
+}
+
+function toggleMeal(){}
+function addEntry(){}
+function deleteEntry(){}
+
+
+const PUSH_A={name:'Lift A — Upper',exercises:[
+  {name:'Cable lateral raise',sets:'3 sets · 12–15 reps · Light weight · Full range · Control the eccentric'},
+  {name:'Seated cable row',sets:'3 sets · 12–15 reps · Neutral grip · Drive elbows back · Squeeze at end'},
+  {name:'Incline chest press machine (45°)',sets:'3 sets · 10–12 reps · Seat adjusted so press angle is 45° · Stop at RPE 7'},
+  {name:'Seated face pull (cable or band)',sets:'2 sets · 15–20 reps · High anchor · Pull to forehead · External rotate at end'},
+]};
+const PUSH_B={name:'Lift A — Upper Alt',exercises:[
+  {name:'Cable lateral raise',sets:'3 sets · 12–15 reps · Add weight only when 15 clean reps feel easy'},
+  {name:'Lat pulldown (machine)',sets:'3 sets · 10–12 reps · Wide overhand grip · Pull to upper chest · Full stretch at top'},
+  {name:'Incline chest press machine (45°)',sets:'3 sets · 10–12 reps · Control the negative · 2 sec down'},
+  {name:'Banded pull-apart',sets:'3 sets · 20 reps · Arms straight · Pull band to chest · Squeeze shoulder blades'},
+]};
+const LEGS_A={name:'Lift B — Lower',exercises:[
+  {name:'Back squat',sets:'3 sets · 10–12 reps · Feet shoulder width · Brace core · Stop parallel or just above · RPE 7 max'},
+  {name:'Romanian deadlift (machine or barbell)',sets:'3 sets · 10–12 reps · Hinge from hips · Slight knee bend · Bar close to legs throughout'},
+  {name:'Leg press machine',sets:'3 sets · 12–15 reps · Feet mid-plate · 3 sec eccentric · Do not lock out knees at top'},
+  {name:'Seated leg curl machine',sets:'3 sets · 12–15 reps · Full range · Pause 1 sec at bottom contraction'},
+]};
+const LEGS_B={name:'Lift B — Lower Alt',exercises:[
+  {name:'Back squat',sets:'4 sets · 8–10 reps · Slightly heavier than Lift B · Same form · Rack at sternum height'},
+  {name:'Leg press machine',sets:'3 sets · 15 reps · Higher foot position targets glutes more · 3 sec down'},
+  {name:'Reverse lunge (barbell or bodyweight)',sets:'3 sets · 10 reps each leg · Step back · Knee to ~1 inch from floor · Drive through front heel'},
+  {name:'Seated leg extension machine',sets:'2 sets · 15 reps · Peak contraction hold 1 sec · Finish the session'},
+]};
+const PULL_A={name:'Lift C — Full Body',exercises:[
+  {name:'Seated cable row',sets:'3 sets · 12–15 reps · Close neutral grip · Chest tall · Drive elbows past torso'},
+  {name:'Back squat',sets:'3 sets · 10 reps · Treat as skill practice · Lighter than Lift B · Perfect form only'},
+  {name:'Cable curl (bilateral)',sets:'3 sets · 12 reps · Low pulley · Elbows fixed at sides · Full range of motion'},
+  {name:'Seated face pull (cable or band)',sets:'2 sets · 15–20 reps · Posture and rear delt · Non-negotiable for shoulder health'},
+]};
+const PULL_B={name:'Lift C — Full Body Alt',exercises:[
+  {name:'Lat pulldown (machine)',sets:'3 sets · 10–12 reps · Lean back slightly · Pull to top of chest · Controlled return'},
+  {name:'Reverse lunge (barbell or bodyweight)',sets:'3 sets · 10 reps each leg · Controlled descent · Hand on rack if needed'},
+  {name:'Cable curl (bilateral)',sets:'3 sets · 12 reps · Supinate at top · Slow negative · Constant cable tension'},
+  {name:'Banded pull-apart',sets:'3 sets · 20 reps · Finish with posture work · Arms straight · Squeeze hard at end'},
+]};
+
+function getWorkoutForDay(d){
+  const w=dow(d);
+  const weekNum=Math.floor(idx(d)/7);
+  if(w===1) return weekNum%2===0 ? PUSH_A : PUSH_B;
+  if(w===3) return weekNum%2===0 ? LEGS_A : LEGS_B;
+  if(w===5) return weekNum%2===0 ? PULL_A : PULL_B;
+  return null;
+}
+
+function showWorkoutModal(d){
+  const w=dow(d);
+  const modal=document.getElementById('workout-modal');
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const wk=getWorkoutForDay(d);
+  if(!wk) return;
+  const hasCircuit=(w===1||w===5);
+  const ci=hasCircuit?getCircuit(d):null;
+
+  let html='<div class="modal-overlay" onclick="closeWorkoutModal(event)">';
+  html+='<div class="modal-box" onclick="event.stopPropagation()">';
+  html+=`<h2>${wk.name} — ${dayNames[w]}, ${months[d.getMonth()]} ${d.getDate()}</h2>`;
+  html+=`<div class="modal-sub">${hasCircuit?'Strength + cardio circuit':'Wednesday lift day'}</div>`;
+  const wn=weekNumForDay(d);
+  html+=`<div class="workout-block"><div class="wb-title">Exercises — week ${wn+1}</div>`;
+  wk.exercises.forEach(e=>{
+    const exId=ALL_EXERCISES.find(x=>x.name===e.name||e.name.includes(x.name.split(' ')[0]))?.id;
+    const recW=exId?getWeightForExercise(exId,d):null;
+    const startW=exId?(getWeights()[exId]||null):null;
+    const progNote=recW&&startW&&recW>startW?`<span style="font-size:10px;color:#1D9E75;margin-left:4px">+${Math.round((recW-startW)*10)/10} lbs from start</span>`:'';
+    html+=`<div class="workout-exercise">
+      <div class="we-name">${e.name}${progNote}</div>
+      <div class="we-sets">${e.sets}</div>
+      ${recW?`<div class="we-weight">${recW} lbs <span style="font-size:11px;color:#888780;font-weight:400">recommended</span></div>`:'<div class="we-prog" style="color:#b4b2a9;font-size:11px">Set starting weight to see progression</div>'}
+    </div>`;
+  });
+  html+=`</div>`;
+  if(hasCircuit&&ci){
+    html+=`<div class="workout-block"><div class="wb-title">Cardio circuit — ${ci.label}</div>`;
+    html+=`<div style="background:#f5f4f0;border-radius:8px;padding:10px 12px">`;
+    const steps=ci.detail.split(/[·→]/).map(s=>s.trim()).filter(Boolean);
+    steps.forEach((s,i)=>{html+=`<div class="circuit-step"><span class="cs-num">${i+1}</span><span class="cs-text">${s}</span></div>`;});
+    html+=`</div></div>`;
+  }
+  html+=`<button class="modal-close" onclick="closeWorkoutModal()">Close</button>`;
+  html+=`</div></div>`;
+  modal.innerHTML=html;
+  modal.style.display='block';
+}
+
+function closeWorkoutModal(e){
+  if(e&&e.target!==document.querySelector('.modal-overlay')) return;
+  document.getElementById('workout-modal').style.display='none';
+}
+
+
+const ALL_EXERCISES=[
+  {id:'cable_lateral',name:'Cable lateral raise',workout:'Lift A'},
+  {id:'seated_cable_row',name:'Seated cable row',workout:'Lift A'},
+  {id:'incline_machine_press',name:'Incline chest press machine',workout:'Lift A'},
+  {id:'face_pull',name:'Seated face pull',workout:'Lift A'},
+  {id:'lat_pulldown',name:'Lat pulldown',workout:'Lift A Alt'},
+  {id:'band_pull_apart',name:'Banded pull-apart',workout:'Lift A Alt'},
+  {id:'back_squat',name:'Back squat',workout:'Lift B'},
+  {id:'rdl',name:'Romanian deadlift',workout:'Lift B'},
+  {id:'leg_press',name:'Leg press machine',workout:'Lift B'},
+  {id:'leg_curl',name:'Seated leg curl machine',workout:'Lift B'},
+  {id:'reverse_lunge',name:'Reverse lunge',workout:'Lift B Alt'},
+  {id:'leg_extension',name:'Seated leg extension machine',workout:'Lift B Alt'},
+  {id:'cable_curl',name:'Cable curl',workout:'Lift C'},
+];
+
+function getWeights(){
+  try{return JSON.parse(localStorage.getItem('grind_weights')||'{}')}catch(e){return {};}
+}
+function saveWeights(w){localStorage.setItem('grind_weights',JSON.stringify(w));}
+
+function calcWeight(startLbs, weekNum){
+  const periods=Math.floor(weekNum/2);
+  return Math.round(startLbs * Math.pow(1.05, periods) * 2) / 2;
+}
+
+function weekNumForDay(d){
+  return Math.floor(idx(d)/7);
+}
+
+let weightSetupOpen=false;
+function toggleWeightSetup(){
+  weightSetupOpen=!weightSetupOpen;
+  renderWeightPanel();
+}
+
+function renderWeightPanel(){
+  const panel=document.getElementById('weight-setup-panel');
+  if(!panel) return;
+  const weights=getWeights();
+  const hasWeights=ALL_EXERCISES.some(e=>weights[e.id]);
+
+  if(!weightSetupOpen && !hasWeights){
+    panel.innerHTML=`<div class="weight-setup">
+      <h3>Set your starting weights</h3>
+      <p>Enter your current working weight for each exercise. The tracker will automatically add 5% every 2 weeks.</p>
+      ${renderWeightInputs(weights)}
+      <button class="weight-save-btn" onclick="saveWeightInputs()">Save weights</button>
+    </div>`;
+    return;
+  }
+
+  if(weightSetupOpen){
+    panel.innerHTML=`<div class="weight-setup">
+      <h3>Edit starting weights</h3>
+      <p>These are your week 1 starting weights. Progression is calculated automatically.</p>
+      ${renderWeightInputs(weights)}
+      <button class="weight-save-btn" onclick="saveWeightInputs()">Save</button>
+      <button class="weight-edit-btn" onclick="toggleWeightSetup()">Cancel</button>
+    </div>`;
+    return;
+  }
+
+  panel.innerHTML='';
+}
+
+function renderWeightInputs(weights){
+  const groups={};
+  ALL_EXERCISES.forEach(e=>{
+    if(!groups[e.workout]) groups[e.workout]=[];
+    groups[e.workout].push(e);
+  });
+  let html='';
+  Object.entries(groups).forEach(([wname,exs])=>{
+    html+=`<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:500;color:#888780;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px">${wname}</div>`;
+    html+=`<div class="weight-grid">`;
+    exs.forEach(e=>{
+      html+=`<div class="weight-input-row">
+        <label>${e.name}</label>
+        <input id="w-${e.id}" type="number" min="0" step="2.5" placeholder="lbs" value="${weights[e.id]||''}">
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+  return html;
+}
+
+function saveWeightInputs(){
+  const weights={};
+  ALL_EXERCISES.forEach(e=>{
+    const v=parseFloat(document.getElementById('w-'+e.id)?.value);
+    if(!isNaN(v)&&v>0) weights[e.id]=v;
+  });
+  saveWeights(weights);
+  weightSetupOpen=false;
+  renderWeightPanel();
+}
+
+function getWeightForExercise(exId, d){
+  const weights=getWeights();
+  const start=weights[exId];
+  if(!start) return null;
+  return calcWeight(start, weekNumForDay(d));
+}
+
+function selWeekOffset(){
+  const today=new Date();today.setHours(0,0,0,0);
+  const todaySow=new Date(today);todaySow.setDate(today.getDate()-((today.getDay()+6)%7));
+  const selSow=new Date(sel);selSow.setDate(sel.getDate()-((sel.getDay()+6)%7));
+  return Math.round((selSow-todaySow)/604800000);
+}
+
+function render(){renderStats();renderWeek();renderCard();renderDiet();}
+
+function shiftDay(n){
+  sel.setDate(sel.getDate()+n);
+  weekOffset=selWeekOffset();
+  render();
+}
+function goToday(){
+  sel=new Date();sel.setHours(0,0,0,0);
+  weekOffset=0;
+  render();
+}
+function shiftWeek(n){
+  weekOffset+=n;
+  const sow=getSOW(weekOffset);
+  const selDow=(sel.getDay()+6)%7;
+  sel=new Date(sow);sel.setDate(sow.getDate()+selDow);
+  render();
+}
+function goCurrentWeek(){
+  weekOffset=0;
+  sel=new Date();sel.setHours(0,0,0,0);
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
