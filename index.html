@@ -74,7 +74,7 @@ h1{font-size:22px;font-weight:500;margin-bottom:4px}
 .tab{padding:5px 12px;border:0.5px solid #b4b2a9;border-radius:8px;font-size:12px;cursor:pointer;background:#fff;color:#888780}
 .tab.active{background:#1D9E75;border-color:#1D9E75;color:#fff}
 @media(max-width:480px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
-
+ 
 .diet-section{background:#fff;border:0.5px solid #d3d1c7;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
 .macro-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:1rem}
 .macro-card{background:#f5f4f0;border-radius:8px;padding:0.7rem 0.85rem}
@@ -102,7 +102,7 @@ h1{font-size:22px;font-weight:500;margin-bottom:4px}
 .add-food-btn{padding:5px 10px;border:0.5px solid #1D9E75;border-radius:6px;font-size:12px;cursor:pointer;background:#1D9E75;color:#fff;white-space:nowrap}
 .add-food-btn:hover{background:#0F6E56}
 .diet-daily-note{font-size:12px;color:#888780;margin-top:2px}
-
+ 
 .modal-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.35);display:flex;align-items:flex-start;justify-content:center;padding-top:80px;z-index:100}
 .modal-box{background:#fff;border:0.5px solid #d3d1c7;border-radius:12px;padding:1.25rem;width:100%;max-width:480px;margin:0 1rem}
 .modal-box h2{font-size:16px;font-weight:500;margin-bottom:4px;color:#1a1a18}
@@ -120,7 +120,7 @@ h1{font-size:22px;font-weight:500;margin-bottom:4px}
 .modal-close:hover{background:#f5f4f0}
 .cr-expandable{cursor:pointer}
 .cr-expandable .expand-hint{font-size:11px;color:#1D9E75;margin-top:2px}
-
+ 
 .weight-setup{background:#fff;border:0.5px solid #d3d1c7;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
 .weight-setup h3{font-size:14px;font-weight:500;margin-bottom:4px;color:#1a1a18}
 .weight-setup p{font-size:12px;color:#888780;margin-bottom:12px}
@@ -139,23 +139,23 @@ h1{font-size:22px;font-weight:500;margin-bottom:4px}
 <div class="app">
   <h1>Wedding Prep</h1>
   <p class="subtitle" id="subtitle">April 1 – July 29, 2025 · 120 days</p>
-
+ 
   <a class="garmin-link" href="https://connect.garmin.com/modern/" target="_blank">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
     Open Garmin Connect
   </a>
-
+ 
   <div class="progress-wrap">
     <div class="progress-meta"><span>Overall progress</span><strong id="pct">0%</strong></div>
     <div class="bar-track"><div class="bar-fill" id="bar" style="width:0%"></div></div>
     <div class="bar-sub"><span id="days-done">0 days complete</span><span id="days-left">120 days remaining</span></div>
   </div>
-
+ 
   <div class="metrics">
     <div class="metric"><div class="lbl">Streak</div><div class="val" id="m-streak">0</div><div class="sub">days</div></div>
     <div class="metric"><div class="lbl">This week</div><div class="val" id="m-week">0/7</div><div class="sub">complete</div></div>
   </div>
-
+ 
   <div style="display:flex;align-items:center;justify-content:space-between;margin:1.25rem 0 0.6rem">
     <span style="font-size:12px;font-weight:500;color:#888780;text-transform:uppercase;letter-spacing:0.05em" id="week-label">This week</span>
     <div style="display:flex;align-items:center;gap:6px">
@@ -165,16 +165,16 @@ h1{font-size:22px;font-weight:500;margin-bottom:4px}
     </div>
   </div>
   <div class="week-grid" id="week-grid"></div>
-
+ 
   <div class="date-nav">
     <button class="dnav-btn" onclick="shiftDay(-1)">&#8592; Prev</button>
     <button class="today-btn" onclick="goToday()">Today</button>
     <button class="dnav-btn" onclick="shiftDay(1)">Next &#8594;</button>
   </div>
-
+ 
   <div id="day-card"></div>
-
-
+ 
+ 
   <div class="section-label" style="display:flex;justify-content:space-between;align-items:center">
     <span>Starting weights</span>
     <button class="weight-edit-btn" onclick="toggleWeightSetup()">Edit</button>
@@ -182,18 +182,18 @@ h1{font-size:22px;font-weight:500;margin-bottom:4px}
   <div id="weight-setup-panel"></div>
   <div class="section-label">Diet — daily log</div>
   <div id="diet-section"></div>
-
-
+ 
+ 
 </div>
-
+ 
 <div id="workout-modal" style="display:none;position:relative"></div>
-
+ 
 <script>
 const TOTAL = 120;
 const GOAL_OZ = 128;
 const SERVING = 35;
-const START = new Date('2025-04-01T00:00:00');
-
+const START = new Date('2026-03-30T00:00:00');
+ 
 function dk(d){ return new Date(d).toISOString().slice(0,10); }
 function idx(d){
   const s=new Date(START); s.setHours(0,0,0,0);
@@ -201,7 +201,7 @@ function idx(d){
   return Math.round((t-s)/86400000);
 }
 function dow(d){ return new Date(d).getDay(); }
-
+ 
 const CIRCUITS=[
   {label:'Hyrox circuit — 4 rounds',detail:'250m row → 15 KB swings → 10 wall ball → 20m farmer carry · Rest 90 sec between rounds · Target 18–20 min total'},
   {label:'Strength intervals — 15 min',detail:'Every 3 min x 5 rounds: 10 KB swings + 8 wall ball + 200m row · Note your row split each round · Rest remainder of each 3 min window'},
@@ -230,13 +230,13 @@ const CIRCUITS=[
   {label:'Hyrox benchmark — final',detail:'500m row → 20 KB swings → 15 wall ball → 20m farmer carry × 2 → 500m row · Record total time · Compare to week 4 benchmark'},
   {label:'Zone 2 flush — 15 min',detail:'5 min easy row (conversational pace) → 5 min easy bike (60–65% max HR) → 5 min easy row · Active recovery only · This is not a workout — it is recovery'},
 ];
-
+ 
 function getCircuit(d){
   const i=idx(d);
   const monFriCount=Math.floor(i/7)*2+(dow(d)===5?1:0);
   return CIRCUITS[monFriCount % CIRCUITS.length];
 }
-
+ 
 function tasks(d){
   const w=dow(d);
   const base=[
@@ -258,7 +258,7 @@ function tasks(d){
   }
   return base;
 }
-
+ 
 function badge(d){
   const w=dow(d);
   if(w===1||w===5){const wk=getWorkoutForDay(d);return {t:(wk?wk.name:'Strength')+' + Circuit',c:'b-strength'};}
@@ -266,30 +266,30 @@ function badge(d){
   if(w===2||w===4||w===6) return {t:'Bike ride',c:'b-bike'};
   return {t:'Active rest',c:'b-rest'};
 }
-
+ 
 function ld(k){ try{ return JSON.parse(localStorage.getItem('grind2_'+k)||'{}'); }catch(e){return {};} }
 function sd(k,v){ localStorage.setItem('grind2_'+k,JSON.stringify(v)); }
-
+ 
 function waterForDay(k){
   const d=ld(k); return d.water_oz||0;
 }
-
+ 
 function addWater(k, oz){
   const d=ld(k);
   d.water_oz=(d.water_oz||0)+oz;
   sd(k,d);
 }
-
+ 
 function resetWater(k){
   const d=ld(k); d.water_oz=0; sd(k,d);
 }
-
+ 
 function waterDone(k){ return waterForDay(k)>=GOAL_OZ; }
-
+ 
 function complete(k,t){
   return t.every(x=>ld(k)[x.id]) && waterDone(k);
 }
-
+ 
 function stats(){
   const today=new Date(); today.setHours(0,0,0,0);
   let streak=0,workouts=0,water=0,weekDone=0,totalDone=0;
@@ -310,16 +310,16 @@ function stats(){
   }
   return {streak,workouts,water,weekDone,totalDone};
 }
-
+ 
 let sel=new Date(); sel.setHours(0,0,0,0);
 let weekOffset=0;
-
+ 
 function getSOW(offset){
   const today=new Date();today.setHours(0,0,0,0);
   const sow=new Date(today);sow.setDate(today.getDate()-((today.getDay()+6)%7)+(offset*7));
   return sow;
 }
-
+ 
 function renderWeek(){
   const today=new Date();today.setHours(0,0,0,0);
   const sow=getSOW(weekOffset);
@@ -347,11 +347,11 @@ renderWeightPanel();};
     grid.appendChild(cell);
   });
 }
-
+ 
 function renderCard(){
   const container=document.getElementById('day-card');
   const ix=idx(sel);
-
+ 
   const key=dk(sel);const t=tasks(sel);const data=ld(key);
   const oz=waterForDay(key);
   const allDone=t.every(x=>data[x.id])&&waterDone(key);
@@ -362,7 +362,7 @@ function renderCard(){
   const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const pct=Math.min(100,Math.round((oz/GOAL_OZ)*100));
   const servings=Math.floor(oz/SERVING);
-
+ 
   container.innerHTML=`
     <div class="card">
       <div class="card-header">
@@ -372,7 +372,7 @@ function renderCard(){
         </div>
         <span class="badge ${allDone?'b-done':b.c}">${allDone?'Complete':b.t}</span>
       </div>
-
+ 
       <div class="water-widget">
         <div class="water-top">
           <div class="water-label">Water intake</div>
@@ -389,10 +389,10 @@ function renderCard(){
           <span class="w-goal-note">${waterDone(key)?'Goal hit!':Math.round(GOAL_OZ-oz)+' fl oz to go'}</span>
         </div>
       </div>
-
+ 
       <div class="checks" id="checks"></div>
     </div>`;
-
+ 
   const list=document.getElementById('checks');
   t.forEach(task=>{
     const done=!!data[task.id];
@@ -413,7 +413,7 @@ function renderCard(){
     list.appendChild(row);
   });
 }
-
+ 
 function logWater(key, oz){
   addWater(key, oz);
   render();
@@ -422,50 +422,50 @@ function resetWaterDay(key){
   resetWater(key);
   render();
 }
-
+ 
 function renderStats(){
   const s=stats();
   document.getElementById('m-streak').textContent=s.streak;
   document.getElementById('m-week').textContent=s.weekDone+'/7';
-
+ 
   const pct=Math.round((s.totalDone/TOTAL)*100);
   document.getElementById('bar').style.width=pct+'%';
   document.getElementById('pct').textContent=pct+'%';
   document.getElementById('days-done').textContent=s.totalDone+' days complete';
   document.getElementById('days-left').textContent=(TOTAL-s.totalDone)+' days remaining';
 }
-
-
+ 
+ 
 const D_GOALS={cal:1950,protein:155,carbs:195,fat:61};
-
+ 
 function getDayMacros(k){
   try{return JSON.parse(localStorage.getItem('macros_'+k)||'null');}catch(e){return null;}
 }
 function saveDayMacros(k,v){localStorage.setItem('macros_'+k,JSON.stringify(v));}
-
+ 
 function barColor(val,goal){
   const p=val/goal;
   if(p<0.85) return '#378ADD';
   if(p<=1.05) return '#1D9E75';
   return '#E24B4A';
 }
-
+ 
 function renderDiet(){
   const key=dk(sel);
   const saved=getDayMacros(key)||{cal:'',protein:'',carbs:'',fat:''};
   const sec=document.getElementById('diet-section');
   if(!sec) return;
-
+ 
   const macroBar=(val,goal,color)=>{
     const pct=Math.min(100,Math.round(((val||0)/goal)*100));
     return `<div class="m-bar"><div class="m-bar-fill" style="width:${pct}%;background:${color}"></div></div>`;
   };
-
+ 
   const cal=parseInt(saved.cal)||0;
   const protein=parseInt(saved.protein)||0;
   const carbs=parseInt(saved.carbs)||0;
   const fat=parseInt(saved.fat)||0;
-
+ 
   sec.innerHTML=`<div class="diet-section">
     <div class="macro-grid" style="grid-template-columns:repeat(4,minmax(0,1fr))">
       <div class="macro-card">
@@ -495,7 +495,7 @@ function renderDiet(){
     </div>
   </div>`;
 }
-
+ 
 function saveMacroInput(key){
   const cal=document.getElementById('d-cal')?.value||'';
   const protein=document.getElementById('d-protein')?.value||'';
@@ -524,12 +524,12 @@ function saveMacroInput(key){
     if(goalEl) goalEl.style.color=barColor(v,goal);
   });
 }
-
+ 
 function toggleMeal(){}
 function addEntry(){}
 function deleteEntry(){}
-
-
+ 
+ 
 const PUSH_A={name:'Lift A — Upper',exercises:[
   {name:'Cable lateral raise',sets:'3 sets · 12–15 reps · Light weight · Full range · Control the eccentric'},
   {name:'Seated cable row',sets:'3 sets · 12–15 reps · Neutral grip · Drive elbows back · Squeeze at end'},
@@ -566,7 +566,7 @@ const PULL_B={name:'Lift C — Full Body Alt',exercises:[
   {name:'Cable curl (bilateral)',sets:'3 sets · 12 reps · Supinate at top · Slow negative · Constant cable tension'},
   {name:'Banded pull-apart',sets:'3 sets · 20 reps · Finish with posture work · Arms straight · Squeeze hard at end'},
 ]};
-
+ 
 function getWorkoutForDay(d){
   const w=dow(d);
   const weekNum=Math.floor(idx(d)/7);
@@ -575,7 +575,7 @@ function getWorkoutForDay(d){
   if(w===5) return weekNum%2===0 ? PULL_A : PULL_B;
   return null;
 }
-
+ 
 function showWorkoutModal(d){
   const w=dow(d);
   const modal=document.getElementById('workout-modal');
@@ -585,7 +585,7 @@ function showWorkoutModal(d){
   if(!wk) return;
   const hasCircuit=(w===1||w===5);
   const ci=hasCircuit?getCircuit(d):null;
-
+ 
   let html='<div class="modal-overlay" onclick="closeWorkoutModal(event)">';
   html+='<div class="modal-box" onclick="event.stopPropagation()">';
   html+=`<h2>${wk.name} — ${dayNames[w]}, ${months[d.getMonth()]} ${d.getDate()}</h2>`;
@@ -593,7 +593,7 @@ function showWorkoutModal(d){
   const wn=weekNumForDay(d);
   html+=`<div class="workout-block"><div class="wb-title">Exercises — week ${wn+1}</div>`;
   wk.exercises.forEach(e=>{
-    const exId=ALL_EXERCISES.find(x=>x.name===e.name||e.name.includes(x.name.split(' ')[0]))?.id;
+    const exId=ALL_EXERCISES.find(x=>x.name===e.name)?.id;
     const recW=exId?getWeightForExercise(exId,d):null;
     const startW=exId?(getWeights()[exId]||null):null;
     const progNote=recW&&startW&&recW>startW?`<span style="font-size:10px;color:#1D9E75;margin-left:4px">+${Math.round((recW-startW)*10)/10} lbs from start</span>`:'';
@@ -616,55 +616,55 @@ function showWorkoutModal(d){
   modal.innerHTML=html;
   modal.style.display='block';
 }
-
+ 
 function closeWorkoutModal(e){
   if(e&&e.target!==document.querySelector('.modal-overlay')) return;
   document.getElementById('workout-modal').style.display='none';
 }
-
-
+ 
+ 
 const ALL_EXERCISES=[
   {id:'cable_lateral',name:'Cable lateral raise',workout:'Lift A'},
   {id:'seated_cable_row',name:'Seated cable row',workout:'Lift A'},
-  {id:'incline_machine_press',name:'Incline chest press machine',workout:'Lift A'},
-  {id:'face_pull',name:'Seated face pull',workout:'Lift A'},
-  {id:'lat_pulldown',name:'Lat pulldown',workout:'Lift A Alt'},
+  {id:'incline_machine_press',name:'Incline chest press machine (45°)',workout:'Lift A'},
+  {id:'face_pull',name:'Seated face pull (cable or band)',workout:'Lift A'},
+  {id:'lat_pulldown',name:'Lat pulldown (machine)',workout:'Lift A Alt'},
   {id:'band_pull_apart',name:'Banded pull-apart',workout:'Lift A Alt'},
   {id:'back_squat',name:'Back squat',workout:'Lift B'},
-  {id:'rdl',name:'Romanian deadlift',workout:'Lift B'},
+  {id:'rdl',name:'Romanian deadlift (machine or barbell)',workout:'Lift B'},
   {id:'leg_press',name:'Leg press machine',workout:'Lift B'},
   {id:'leg_curl',name:'Seated leg curl machine',workout:'Lift B'},
-  {id:'reverse_lunge',name:'Reverse lunge',workout:'Lift B Alt'},
+  {id:'reverse_lunge',name:'Reverse lunge (barbell or bodyweight)',workout:'Lift B Alt'},
   {id:'leg_extension',name:'Seated leg extension machine',workout:'Lift B Alt'},
-  {id:'cable_curl',name:'Cable curl',workout:'Lift C'},
+  {id:'cable_curl',name:'Cable curl (bilateral)',workout:'Lift C'},
 ];
-
+ 
 function getWeights(){
   try{return JSON.parse(localStorage.getItem('grind_weights')||'{}')}catch(e){return {};}
 }
 function saveWeights(w){localStorage.setItem('grind_weights',JSON.stringify(w));}
-
+ 
 function calcWeight(startLbs, weekNum){
-  const periods=Math.floor(weekNum/2);
-  return Math.round(startLbs * Math.pow(1.05, periods) * 2) / 2;
+  const periods=Math.min(Math.floor(weekNum/2), 8);
+  return Math.round(startLbs * Math.pow(1.025, periods) * 2) / 2;
 }
-
+ 
 function weekNumForDay(d){
   return Math.floor(idx(d)/7);
 }
-
+ 
 let weightSetupOpen=false;
 function toggleWeightSetup(){
   weightSetupOpen=!weightSetupOpen;
   renderWeightPanel();
 }
-
+ 
 function renderWeightPanel(){
   const panel=document.getElementById('weight-setup-panel');
   if(!panel) return;
   const weights=getWeights();
   const hasWeights=ALL_EXERCISES.some(e=>weights[e.id]);
-
+ 
   if(!weightSetupOpen && !hasWeights){
     panel.innerHTML=`<div class="weight-setup">
       <h3>Set your starting weights</h3>
@@ -674,7 +674,7 @@ function renderWeightPanel(){
     </div>`;
     return;
   }
-
+ 
   if(weightSetupOpen){
     panel.innerHTML=`<div class="weight-setup">
       <h3>Edit starting weights</h3>
@@ -685,10 +685,10 @@ function renderWeightPanel(){
     </div>`;
     return;
   }
-
+ 
   panel.innerHTML='';
 }
-
+ 
 function renderWeightInputs(weights){
   const groups={};
   ALL_EXERCISES.forEach(e=>{
@@ -709,7 +709,7 @@ function renderWeightInputs(weights){
   });
   return html;
 }
-
+ 
 function saveWeightInputs(){
   const weights={};
   ALL_EXERCISES.forEach(e=>{
@@ -720,23 +720,23 @@ function saveWeightInputs(){
   weightSetupOpen=false;
   renderWeightPanel();
 }
-
+ 
 function getWeightForExercise(exId, d){
   const weights=getWeights();
   const start=weights[exId];
   if(!start) return null;
   return calcWeight(start, weekNumForDay(d));
 }
-
+ 
 function selWeekOffset(){
   const today=new Date();today.setHours(0,0,0,0);
   const todaySow=new Date(today);todaySow.setDate(today.getDate()-((today.getDay()+6)%7));
   const selSow=new Date(sel);selSow.setDate(sel.getDate()-((sel.getDay()+6)%7));
   return Math.round((selSow-todaySow)/604800000);
 }
-
+ 
 function render(){renderStats();renderWeek();renderCard();renderDiet();}
-
+ 
 function shiftDay(n){
   sel.setDate(sel.getDate()+n);
   weekOffset=selWeekOffset();
@@ -759,7 +759,7 @@ function goCurrentWeek(){
   sel=new Date();sel.setHours(0,0,0,0);
   render();
 }
-
+ 
 render();
 </script>
 </body>
